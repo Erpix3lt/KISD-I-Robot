@@ -12,6 +12,9 @@ Install all dependencies: `path/to/venv/bin/pip install vPython`& `path/to/venv/
 
 Run the script via: `path/to/venv/bin/python bounce-ball.py`
 
+## How to run UR3 virtual box
+- download and install https://www.oracle.com/virtualization/technologies/vm/downloads/virtualbox-downloads.html
+- unzip and run  https://s3-eu-west-1.amazonaws.com/ur-support-site/213149/URSim_VIRTUAL-5.12.6.1102099.rar
 
 ## Learnings
 - p in front of list returns position
@@ -22,3 +25,4 @@ Run the script via: `path/to/venv/bin/python bounce-ball.py`
 ## To Do
 - Define global variable of myPose, so changes to variables stay after restarting program
 - Calculate bouncing ball box
+- [x] get Simulation running
