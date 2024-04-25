@@ -8,7 +8,7 @@
 
 Create a new env: `python3 -m venv path/to/venv`
 
-Install all dependencies: `path/to/venv/bin/pip install vPython`& path/to/venv/bin/pip install paho-mqtt`
+Install all dependencies: `path/to/venv/bin/pip install vPython`& `path/to/venv/bin/pip install paho-mqtt`
 
 Run the script via: `path/to/venv/bin/python bounce-ball.py`
 
