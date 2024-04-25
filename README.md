@@ -13,3 +13,12 @@ Install all dependencies: `path/to/venv/bin/pip install vPython`& `path/to/venv/
 Run the script via: `path/to/venv/bin/python bounce-ball.py`
 
 
+## Learnings
+- p in front of list returns position
+- get_actual_tcp_pose() returns actual position
+- ur3/set/cmd - getJoints to return position in MQTT
+
+
+## To Do
+- Define global variable of myPose, so changes to variables stay after restarting program
+- Calculate bouncing ball box
