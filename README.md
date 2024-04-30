@@ -33,3 +33,7 @@ Type `exit` in the venv to exit.
 - Define global variable of myPose, so changes to variables stay after restarting program
 - Calculate bouncing ball box
 - [x] get Simulation running
+
+## UR3 IMPORTANT!
+- SHARED FOLDER: /media/sf_robot-project/mqtt-ur3-bridge/src/urscript/auto-backup/mqtt-ur3-bridge
+- UR3 PROGRAMM FOLDER: Desktop > ProgramsUr3 - /home/ur/ursim-current/programs.UR3
