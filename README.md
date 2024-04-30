@@ -1,28 +1,28 @@
-# KISD-Template
-Archive of everything surrounding the course.
-
-## Dates
-- Exhibition in Summer (around June)
-
-## TODOs
-- Research Biological AI
-- Look at old sketches of Flowers
-
-## Course-Works
-- Flora <br> https://github.com/Erpix3lt/Flora
+# I,Robot
 
 ## References
-### 18.10.2023
-- Max Ernst Museum, Exhibition <br> https://maxernstmuseum.lvr.de/de/ausstellungen/surreal_futures_16nv2a6w00cbh/surreal_futures.html
-- Virtual Herbaria, Archive.org <br> https://archive.org/details/texts?query=Herbaria
-- ImageNet Dataset Categories <br> https://www.image-net.org/
-- Ernst Haekel Zoologe <br> https://de.wikipedia.org/wiki/Ernst_Haeckel
 
-### 19.10.2023
-- Voynich Manuskript, Plant Chapter <br> http://www.edithsherwood.com/voynich_botanical_plants/ <br> https://www.holybooks.com/wp-content/uploads/Voynich-Manuscript.pdf
-- WordNet Relations of words, also API available <br> https://wordnet.princeton.edu/
-- OpenAI Microscope <br> https://microscope.openai.com/models
+- Script manual: https://s3-eu-west-1.amazonaws.com/ur-support-site/115824/scriptManual_SW5.11.pdf
 
-### 31.10.2023
-- Objects and texture <br> https://www.cytter-datalab.com/
+## How to run the script
 
+Create a new env: `python3 -m venv path/to/venv`
+
+Install all dependencies: `path/to/venv/bin/pip install vPython`& `path/to/venv/bin/pip install paho-mqtt`
+
+Run the script via: `path/to/venv/bin/python bounce-ball.py`
+
+## How to run UR3 virtual box
+- download and install https://www.oracle.com/virtualization/technologies/vm/downloads/virtualbox-downloads.html
+- unzip and run  https://s3-eu-west-1.amazonaws.com/ur-support-site/213149/URSim_VIRTUAL-5.12.6.1102099.rar
+
+## Learnings
+- p in front of list returns position
+- get_actual_tcp_pose() returns actual position
+- ur3/set/cmd - getJoints to return position in MQTT
+
+
+## To Do
+- Define global variable of myPose, so changes to variables stay after restarting program
+- Calculate bouncing ball box
+- [x] get Simulation running
