@@ -6,11 +6,18 @@
 
 ## How to run the script
 
-Create a new env: `python3 -m venv path/to/venv`
+Create a new env: `python3 -m venv env_i_robot`
 
-Install all dependencies: `path/to/venv/bin/pip install vPython`& `path/to/venv/bin/pip install paho-mqtt`
+Activate the env: `source env_i_robot/bin/activate``
 
-Run the script via: `path/to/venv/bin/python bounce-ball.py`
+Now we can use python and pip as usual.
+
+Install all dependencies: `pip install vPython`& `pip install paho-mqtt`
+
+Run the script via: `python3 bounce-ball.py`
+
+Type `exit` in the venv to exit.
+
 
 ## How to run UR3 virtual box
 - download and install https://www.oracle.com/virtualization/technologies/vm/downloads/virtualbox-downloads.html
