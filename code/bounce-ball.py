@@ -1,20 +1,6 @@
 from vpython import *
-import paho.mqtt.client as mqtt
-
-# MQTT broker credentials
-host = "urpi.local"
-user = "urpi"
-password = "urpi"
-port = 1883
-
-# Function to establish MQTT connection and publish the command
-def send_command():
-    client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
-    client.username_pw_set(username=user, password=password)
-    client.connect(host, port=port)
-    client.publish("ur3/set/cmd", "x:0.2")
-    client.publish("ur3/set/cmd", "movej")
-    client.disconnect()
+from mqtt_service import Mqtt_Service
+import sys
 
 side = 4.0
 wall_thickness = 0.3
@@ -29,17 +15,26 @@ side = side - wall_thickness * 0.5 - ball.radius
 
 speed = 0.2
 
-   
-send_command()
+mqtt = Mqtt_Service()
+mqtt.establish_connection()
 
-while True:
-    rate(100)
-    print("Position: ", ball.pos)
-    ball.pos = ball.pos + (ball.p / ball.mass) * speed
-    if not (side > ball.pos.x > -side):
-        ball.p.x = -ball.p.x
-    if not (side > ball.pos.y > -side):
-        ball.p.y = -ball.p.y
-    if not (side > ball.pos.z > -side):
-        ball.p.z = -ball.p.z
-    
+try:
+    while True:
+        rate(100)
+        ball.pos = ball.pos + (ball.p / ball.mass) * speed
+        if not (side > ball.pos.x > -side):
+            mqtt.move_to_pos("1")
+            ball.p.x = -ball.p.x
+        if not (side > ball.pos.y > -side):
+            mqtt.move_to_pos("2")
+            ball.p.y = -ball.p.y
+        if not (side > ball.pos.z > -side):
+            mqtt.move_to_pos("3")
+            ball.p.z = -ball.p.z
+
+except KeyboardInterrupt:
+    print("Script interrupted. Disconnecting MQTT...")
+finally:
+    mqtt.disconnect_connection()
+
+sys.exit(0)
