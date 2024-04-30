@@ -8,7 +8,7 @@
 
 Create a new env: `python3 -m venv env_i_robot`
 
-Activate the env: `source env_i_robot/bin/activate``
+Activate the env: `source env_i_robot/bin/activate`
 
 Now we can use python and pip as usual.
 
