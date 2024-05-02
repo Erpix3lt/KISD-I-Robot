@@ -23,13 +23,13 @@ try:
         rate(100)
         ball.pos = ball.pos + (ball.p / ball.mass) * speed
         if not (side > ball.pos.x > -side):
-            mqtt.move_to_pos("1")
+            mqtt.move_to_position("1")
             ball.p.x = -ball.p.x
         if not (side > ball.pos.y > -side):
-            mqtt.move_to_pos("2")
+            mqtt.move_to_position("2")
             ball.p.y = -ball.p.y
         if not (side > ball.pos.z > -side):
-            mqtt.move_to_pos("3")
+            mqtt.move_to_position("3")
             ball.p.z = -ball.p.z
 
 except KeyboardInterrupt:
