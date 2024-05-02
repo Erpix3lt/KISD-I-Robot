@@ -12,8 +12,7 @@ Activate the env: `source env_i_robot/bin/activate`
 
 Now we can use python and pip as usual.
 
-Install all dependencies: `pip install vPython`& `pip install paho-mqtt` `pip3 install python-dotenv
-`
+Install all dependencies: `pip install vPython`& `pip install paho-mqtt` `pip install python-dotenv`
 
 Copy the .env.template file and name it .env, fill in all connection details. The default port is 1883.
 
