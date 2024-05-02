@@ -14,6 +14,8 @@ Now we can use python and pip as usual.
 
 Install all dependencies: `pip install vPython`& `pip install paho-mqtt`
 
+Copy the .env.template file and name it .env, fill in all connection details. The default port is 1883.
+
 Run the script via: `python3 bounce-ball.py`
 
 Type `exit` in the venv to exit.
