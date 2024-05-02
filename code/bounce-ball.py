@@ -16,25 +16,25 @@ side = side - wall_thickness * 0.5 - ball.radius
 speed = 0.2
 
 mqtt = Mqtt_Service()
-mqtt.establish_connection()
+client = mqtt.establish_connection()
 
 try:
     while True:
         rate(100)
         ball.pos = ball.pos + (ball.p / ball.mass) * speed
         if not (side > ball.pos.x > -side):
-            mqtt.move_to_position("1")
+            mqtt.move_to_pos("1")
             ball.p.x = -ball.p.x
         if not (side > ball.pos.y > -side):
-            mqtt.move_to_position("2")
+            mqtt.move_to_pos("2")
             ball.p.y = -ball.p.y
         if not (side > ball.pos.z > -side):
-            mqtt.move_to_position("3")
+            mqtt.move_to_pos("3")
             ball.p.z = -ball.p.z
 
 except KeyboardInterrupt:
     print("Script interrupted. Disconnecting MQTT...")
 finally:
-    mqtt.disconnect_connection()
+    mqtt.disconnect_connection(client)
 
 sys.exit(0)
