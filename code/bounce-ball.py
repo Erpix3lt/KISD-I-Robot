@@ -1,5 +1,5 @@
 from vpython import *
-from mqtt_service import Mqtt_Service
+from robot_interface.robot_service import Robot_Service
 import sys
 
 side = 4.0
@@ -15,26 +15,25 @@ side = side - wall_thickness * 0.5 - ball.radius
 
 speed = 0.2
 
-mqtt = Mqtt_Service()
-client = mqtt.establish_connection()
+robot_service = Robot_Service()
 
 try:
     while True:
         rate(100)
         ball.pos = ball.pos + (ball.p / ball.mass) * speed
         if not (side > ball.pos.x > -side):
-            mqtt.move_to_pos("1")
+            robot_service.move_to_tcp_pos(ball.pos.x, ball.pos.y, ball.pos.z)
             ball.p.x = -ball.p.x
         if not (side > ball.pos.y > -side):
-            mqtt.move_to_pos("2")
+            robot_service.move_to_tcp_pos(ball.pos.x, ball.pos.y, ball.pos.z)
             ball.p.y = -ball.p.y
         if not (side > ball.pos.z > -side):
-            mqtt.move_to_pos("3")
+            robot_service.move_to_tcp_pos(ball.pos.x, ball.pos.y, ball.pos.z)
             ball.p.z = -ball.p.z
 
 except KeyboardInterrupt:
     print("Script interrupted. Disconnecting MQTT...")
 finally:
-    mqtt.disconnect_connection(client)
+    robot_service.disconnect()
 
 sys.exit(0)
