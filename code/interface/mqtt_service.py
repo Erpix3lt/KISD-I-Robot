@@ -6,6 +6,8 @@ import time
 class Mqtt_Service: 
     """
     MQTT service class for sending commands to a Universal Robots UR3 robot arm.
+    It is housing all the basic funtionality to communicate via MQTT, such as connect, disconnect
+    subscibe and the on_message callback.
     """
     def __init__(self) -> None:
         """

@@ -1,18 +1,16 @@
 # I,Robot
 
 ## References
-
 - Script manual: https://s3-eu-west-1.amazonaws.com/ur-support-site/115824/scriptManual_SW5.11.pdf
 
 ## How to run the script
-
 Create a new env: `python3 -m venv env_i_robot`
 
 Activate the env: `source env_i_robot/bin/activate`
 
 Now we can use python and pip as usual.
 
-Install all dependencies: `pip install vPython`& `pip install paho-mqtt` `pip install python-dotenv`
+Install all dependencies: `pip install -r requirements.txt`
 
 Copy the .env.template file and name it .env, fill in all connection details. The default port is 1883.
 
@@ -20,6 +18,15 @@ Run the script via: `python3 bounce-ball.py`
 
 Type `exit` in the venv to exit.
 
+## Architecture
+Inside the code folder there a the following subdirectories: interface, tests. Alongside is the main file bounce_ball.py
+
+**interface** The goal of the interface file is to provide all the basic functionality to communicate with the robot. 
+There will also be additional functionality and helper functions.
+
+**tests** The test folder contains both mockup and real-world tests.
+
+**bounce_Ball.py** As of now this is our main file, it simulates a bouncing ball, sending the simulated positions to the robot itself.
 
 ## How to run UR3 virtual box
 - download and install https://www.oracle.com/virtualization/technologies/vm/downloads/virtualbox-downloads.html

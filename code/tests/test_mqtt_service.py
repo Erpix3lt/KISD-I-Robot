@@ -3,10 +3,13 @@ from unittest.mock import MagicMock, patch
 import os
 import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from robot_interface.robot_service import Robot_Service
+from interface.robot_service import Robot_Service
 
 class TestRobotService(unittest.TestCase):
-
+    """
+    This is a mockup test suite for the interface package. It will not 
+    publish any MQTT messages.
+    """
     def setUp(self):
         self.robot_service = Robot_Service()
 

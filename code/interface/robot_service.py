@@ -4,6 +4,8 @@ class Robot_Service(Mqtt_Service):
     """
     Service class for controlling a robot using MQTT.
     Inherits from Mqtt_Service class.
+    It provides all the detailed functionality for the UR3 arm. 
+    Such as get_val, move_pos, move_to_tcp_pos etc..
     """
     def __init__(self) -> None:
         """

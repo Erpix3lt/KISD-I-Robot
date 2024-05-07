@@ -1,6 +1,13 @@
 from vpython import *
-from robot_interface.robot_service import Robot_Service
+from interface.robot_service import Robot_Service
 import sys
+
+"""
+This will simulate a bouncing ball using vpython. 
+It will map the balls position and publish it to the 
+robot, essantially simulating a bouncing ball in the
+real world.
+"""
 
 side = 4.0
 wall_thickness = 0.3
