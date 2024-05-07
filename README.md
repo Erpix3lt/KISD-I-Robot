@@ -30,6 +30,17 @@ Type `exit` in the venv to exit.
 - get_actual_tcp_pose() returns actual position
 - ur3/set/cmd - getJoints to return position in MQTT
 
+## Update Raspberry and UR Simulation
+### Raspberry
+- Login credentials are **USERNAME: urpi** and **PW: urpi**
+- navigate to mqtt-ur3-bridge
+- Delete current changes -> `git stash`
+- Pull all the newest changes -> `git pull´
+- restart the raspberry pi
+
+### UR Simulation
+- Navigate to program files folder (storing our urscript files)
+- download the newest version from urscript folder https://gitlab.rlp.net/kitegg/public/kisd/mqtt-ur3-bridge/-/tree/auto-backup/src/urscript/auto-backup/mqtt-ur3-bridge?ref_type=heads
 
 ## To Do
 - Define global variable of myPose, so changes to variables stay after restarting program
