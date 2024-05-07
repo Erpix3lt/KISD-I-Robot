@@ -149,7 +149,12 @@ class Mqtt_Service:
         if az is not None:
             self.set_individual_axes("az", az)
            
-        # TODO: ADD Blend and Time to moveJ command if not None 
+        if time is not None:
+            self.send_command('time:' + str(time))
+            
+        if blend is not None:
+            self.send_command('blend:' + str(time))
+            
         self.send_command("moveJ")
         
     def wait_for_response(self, timeout: float) -> str:
@@ -169,4 +174,38 @@ class Mqtt_Service:
         else:
             print("Timeout reached. No response received.")
             return None
+        
+    def assert_has_reach_tcp_pos(self, x: float, y: float, z: float, ax: float = None, ay: float = None, az: float = None,):
+        """
+        Asserts the current tcp pos with a desired pos
+
+        Args:
+            Provide desired pos values
+
+        Returns:
+            True if the pos is equal to the desired pos. False if it is unequal or it failed.
+        """
+        try:
+            x_str = str(x)
+            y_str = str(y)
+            z_str = str(z)
+            ax_str = str(ax)
+            ay_str = str(ay)
+            az_str = str(az)
+            
+            pose_string = f"pose:p[{x_str}, {y_str}, {z_str}, {ax_str}, {ay_str}, {az_str}]"
+
+            currentPosition = self.get_Pose()
+
+            if currentPosition == pose_string:
+                return True
+            else:
+                return False
+        except Exception as e:
+            print("Error asserting the current tcp values:", e)
+        finally:
+            return False
+
+        
+        
 
