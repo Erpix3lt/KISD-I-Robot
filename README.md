@@ -60,6 +60,10 @@ There will also be additional functionality and helper functions.
 - Navigate to program files folder (storing our urscript files)
 - download the newest version from urscript folder https://gitlab.rlp.net/kitegg/public/kisd/mqtt-ur3-bridge/-/tree/auto-backup/src/urscript/auto-backup/mqtt-ur3-bridge?ref_type=heads
 
+## Counting Cars
+- Appy with the robot as a traffic observer
+- https://www.werkenbijdufec.nl/international/
+
 ## To Do
 - Define global variable of myPose, so changes to variables stay after restarting program
 - Calculate bouncing ball box
