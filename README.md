@@ -19,7 +19,7 @@ Run the script via: `python3 bounce-ball.py`
 Type `exit` in the venv to exit.
 
 ## How to run the detection script?
-*Example taken from: https://medium.com/@kaanerdenn/introduction-to-object-detection-vehicle-detection-with-opencv-and-cascade-classifiers-8c6834191a0b*
+*Example taken from: https://medium.com/@KaziMushfiq1234/object-detection-using-yolov5-from-scartch-with-python-computer-vision-cfb6b65f540b*
 
 
 In your console navigate to the detection folder inside code: `cd code/detection`
