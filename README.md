@@ -18,6 +18,19 @@ Run the script via: `python3 bounce-ball.py`
 
 Type `exit` in the venv to exit.
 
+## How to run the detection script?
+In your console navigate to the detection folder inside code: `cd code/detection`
+
+Create a new env: `python3 -m venv env_i_robot`
+
+Activate the env: `source env_i_robot/bin/activate`
+
+Now we can use python and pip as usual.
+
+Install all dependencies: `pip install -r requirements.txt`
+
+By standard it checks for cars in 2car.png. You might want to add your own image to assets and configure the path inside detection.py to check for cars in the newly added image.
+
 ## Architecture
 Inside the code folder there a the following subdirectories: interface, tests. Alongside is the main file bounce_ball.py
 
