@@ -4,9 +4,9 @@
 - Script manual: https://s3-eu-west-1.amazonaws.com/ur-support-site/115824/scriptManual_SW5.11.pdf
 
 ## How to run the script
-Create a new env: `python3 -m venv env_i_robot`
+Create a new env: `python3 -m venv _env_i_robot`
 
-Activate the env: `source env_i_robot/bin/activate`
+Activate the env: `source _env_i_robot/bin/activate`
 
 Now we can use python and pip as usual.
 
@@ -14,25 +14,20 @@ Install all dependencies: `pip install -r requirements.txt`
 
 Copy the .env.template file and name it .env, fill in all connection details. The default port is 1883.
 
-Run the script via: `python3 bounce-ball.py`
+Run the Bounce Ball script via: `python3 bounce-ball.py`
+
+To run the Detection script into the detection folder: `cd detection`
+and run: `python3 detection.py`
 
 Type `exit` in the venv to exit.
 
 ## How to run the detection script?
+## Object Detection
 *Example taken from: https://medium.com/@KaziMushfiq1234/object-detection-using-yolov5-from-scartch-with-python-computer-vision-cfb6b65f540b*
 
+Detection of object through the use of the YOLOv5 model. Target boxes are drawn using OpenCv
 
-In your console navigate to the detection folder inside code: `cd code/detection`
-
-Create a new env: `python3 -m venv env_i_robot`
-
-Activate the env: `source env_i_robot/bin/activate`
-
-Now we can use python and pip as usual.
-
-Install all dependencies: `pip install -r requirements.txt`
-
-By standard it checks for cars in 2car.png. You might want to add your own image to assets and configure the path inside detection.py to check for cars in the newly added image.
+If yo want to analyse custom images enter them as a path.
 
 ## Architecture
 Inside the code folder there a the following subdirectories: interface, tests. Alongside is the main file bounce_ball.py
