@@ -19,6 +19,9 @@ Run the script via: `python3 bounce-ball.py`
 Type `exit` in the venv to exit.
 
 ## How to run the detection script?
+*Example taken from: https://medium.com/@kaanerdenn/introduction-to-object-detection-vehicle-detection-with-opencv-and-cascade-classifiers-8c6834191a0b*
+
+
 In your console navigate to the detection folder inside code: `cd code/detection`
 
 Create a new env: `python3 -m venv env_i_robot`
