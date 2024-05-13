@@ -1,3 +1,45 @@
+# from vpython import *
+# from mqtt_service import Mqtt_Service
+# import sys
+
+# side = 4.0
+# wall_thickness = 0.3
+# side_two = 2 * side - wall_thickness
+# side_three = 2 * side + wall_thickness
+
+# ball = sphere(color=color.green, radius=0.4, make_trail=True, retain=200)
+# ball.mass = 1.0
+# ball.p = vector(-0.15, -0.23, +0.27)
+
+# side = side - wall_thickness * 0.5 - ball.radius
+
+# speed = 0.2
+
+# mqtt = Mqtt_Service()
+# mqtt.establish_connection()
+
+# try:
+#     while True:
+#         rate(100)
+#         ball.pos = ball.pos + (ball.p / ball.mass) * speed
+#         if not (side > ball.pos.x > -side):
+#             mqtt.move_to_pos("1")
+#             ball.p.x = -ball.p.x
+#         if not (side > ball.pos.y > -side):
+#             mqtt.move_to_pos("2")
+#             ball.p.y = -ball.p.y
+#         if not (side > ball.pos.z > -side):
+#             mqtt.move_to_pos("3")
+#             ball.p.z = -ball.p.z
+
+# except KeyboardInterrupt:
+#     print("Script interrupted. Disconnecting MQTT...")
+# finally:
+#     mqtt.disconnect_connection(mqtt)
+
+# sys.exit(0)
+
+
 from vpython import *
 from mqtt_service import Mqtt_Service
 import sys
@@ -9,11 +51,11 @@ side_three = 2 * side + wall_thickness
 
 ball = sphere(color=color.green, radius=0.4, make_trail=True, retain=200)
 ball.mass = 1.0
-ball.p = vector(-0.15, -0.23, +0.27)
+ball.p = vector(-0.15, -0.23, +0.0)  # Z component removed
 
 side = side - wall_thickness * 0.5 - ball.radius
 
-speed = 0.2
+speed = 0.1
 
 mqtt = Mqtt_Service()
 mqtt.establish_connection()
@@ -22,15 +64,24 @@ try:
     while True:
         rate(100)
         ball.pos = ball.pos + (ball.p / ball.mass) * speed
+        
+        # Check for hitting walls in x-direction
         if not (side > ball.pos.x > -side):
-            mqtt.move_to_position("1")
+            if ball.pos.x > 0:
+                mqtt.move_to_pos("0")
+            else:
+                mqtt.move_to_pos("1")
             ball.p.x = -ball.p.x
+            print(vector(ball.pos.x, ball.pos.y, 0))  # Output position as a vector
+        
+        # Check for hitting walls in y-direction
         if not (side > ball.pos.y > -side):
-            mqtt.move_to_position("2")
+            if ball.pos.y > 0:
+                mqtt.move_to_pos("2")
+            else:
+                mqtt.move_to_pos("3")
             ball.p.y = -ball.p.y
-        if not (side > ball.pos.z > -side):
-            mqtt.move_to_position("3")
-            ball.p.z = -ball.p.z
+            print(vector(ball.pos.x, ball.pos.y, 0))  # Output position as a vector
 
 except KeyboardInterrupt:
     print("Script interrupted. Disconnecting MQTT...")

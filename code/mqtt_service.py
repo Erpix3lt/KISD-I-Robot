@@ -12,10 +12,10 @@ class Mqtt_Service:
         Initialize MQTT service with environment variables.
         """
         load_dotenv() 
-        self.host = os.getenv("MQTT_HOST")
-        self.user = os.getenv("MQTT_USER")
-        self.password = os.getenv("MQTT_PASSWORD")
-        self.port = int(os.getenv("MQTT_PORT", 1883))
+        self.host = "urpi.local"
+        # self.user = os.getenv("MQTT_USER")
+        # self.password = os.getenv("MQTT_PASSWORD")
+        self.port = 1883
   
     def establish_connection(self):
         """
@@ -26,7 +26,7 @@ class Mqtt_Service:
         """
         try:
             client = mqtt.Client(protocol=mqtt.MQTTv5)
-            client.username_pw_set(username=self.user, password=self.password)
+            #client.username_pw_set(username=self.user, password=self.password)
             client.connect(self.host, port=self.port)
             return client
         except Exception as e:
