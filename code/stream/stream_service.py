@@ -21,8 +21,8 @@ class Stream_Service:
         for fetching images.
         """
         load_dotenv()
-        self.crop_margin_top = 30
-        self.default_url = os.getenv("DEFAULT_STREAM_URL")
+        self.crop_margin_top: int = int(os.getenv("IMAGE_CROP_MARGIN_TOP"))
+        self.default_url: str = os.getenv("DEFAULT_STREAM_URL")
 
     def get_image_from_url(self, url: Optional[str] = None, is_cropped: bool = True) -> Optional[Image.Image]:
         """

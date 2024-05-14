@@ -1,7 +1,6 @@
 from detection.detection_service import Detection_Service
 from detection.image_service import Image_Service
 from stream.stream_service import Stream_Service
-from interface.robot_service import Robot_Service
 from logger import Logger
 from PIL import Image
 import time
@@ -18,7 +17,6 @@ class Count_Cars():
         self.image_service = Image_Service()
         self.detection_service = Detection_Service(self.image_service)
         self.stream_service = Stream_Service()
-        self.robot_service = Robot_Service()
         self.logger = Logger()
         self.image: Image.Image = None
         self.previous_image: Image.Image = None

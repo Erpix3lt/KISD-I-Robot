@@ -2,11 +2,14 @@ from skimage.metrics import structural_similarity
 import cv2
 import numpy as np
 from PIL import Image
+import os
+from dotenv import load_dotenv
 
 class Image_Service:
   
   def __init__(self) -> None:
-    pass
+    load_dotenv() 
+    self.similarity = os.getenv("IMAGE_COMPARE_SIMILARITY")
   
   def apply_mask_to_image(self, image: Image.Image, mask_image_path:str = 'code/detection/assets/street-mask.png') -> Image.Image:
       """
@@ -50,8 +53,7 @@ class Image_Service:
       gray_previous_image = cv2.cvtColor(np_previous_image, cv2.COLOR_RGB2GRAY)
 
       score, _ = structural_similarity(gray_image, gray_previous_image, full=True)
-      threshold = 0.97  # Adjust as needed
-      if score < threshold:
+      if score < str(self.similarity):
           return True
       else:
           return False
