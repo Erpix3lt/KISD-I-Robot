@@ -47,14 +47,3 @@ class Detection_Service:
         image = self.initialise_image(image)
         result = self.model(image)
         return result, image
-
-    def has_moving_object(self, image, previous_image):
-        # Compare two images using opencv 
-        # Check wether the "newer" image is different from the "older" one
-        return True
-    
-    def get_moving_objects(self, result, previous_result):
-        # Compare the two analysed results of the image 
-        # Implement logic to check wether an image has n moving cars
-        # create a new result object containing the list of moving objects and their positions
-        return True

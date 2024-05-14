@@ -83,21 +83,17 @@ class Stream_Service:
         Returns:
             bool: True if the images are different, False otherwise.
         """
-        # Convert PIL images to numpy arrays
-        np_image = np.array(image)
-        np_previous_image = np.array(previous_image)
+        masked_image = self.apply_mask_to_image(image)
+        masked_previous_image = self.apply_mask_to_image(previous_image)
+        
+        np_image = np.array(masked_image)
+        np_previous_image = np.array(masked_previous_image)
 
-        # Convert images to grayscale
         gray_image = cv2.cvtColor(np_image, cv2.COLOR_RGB2GRAY)
         gray_previous_image = cv2.cvtColor(np_previous_image, cv2.COLOR_RGB2GRAY)
 
-        # Compute SSIM between the two images
         score, _ = structural_similarity(gray_image, gray_previous_image, full=True)
-
-        # Set a threshold for significant change
-        threshold = 0.9  # Adjust as needed
-        
-        # If SSIM score is less than threshold, consider it as a significant change
+        threshold = 0.97  # Adjust as needed
         if score < threshold:
             return True
         else:
