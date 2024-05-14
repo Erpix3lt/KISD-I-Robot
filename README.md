@@ -4,7 +4,7 @@
 - Script manual: https://s3-eu-west-1.amazonaws.com/ur-support-site/115824/scriptManual_SW5.11.pdf
 
 ## How to run the script
-Create a new env: `python3 -m venv _env_i_robot`
+Create a new env: `python -m venv _env_i_robot`
 
 Activate the env: `source _env_i_robot/bin/activate`
 
@@ -12,12 +12,9 @@ Now we can use python and pip as usual.
 
 Install all dependencies: `pip install -r requirements.txt`
 
-Copy the .env.template file and name it .env, fill in all connection details. The default port is 1883.
+Copy the .env.template file and name it .env, fill in all details. The default port is 1883.
 
-Run the Bounce Ball script via: `python3 bounce-ball.py`
-
-To run the Detection script into the detection folder: `cd detection`
-and run: `python3 detection.py`
+To run the count cars script run: `python count_cars.py`
 
 Type `exit` in the venv to exit.
 
@@ -65,9 +62,10 @@ There will also be additional functionality and helper functions.
 - https://www.werkenbijdufec.nl/international/
 
 ## To Do
-- Define global variable of myPose, so changes to variables stay after restarting program
-- Calculate bouncing ball box
-- [x] get Simulation running
+- [ ] Apply to the job
+- [ ] Design the Tooltip
+- [ ] Plan out the robots movement
+
 
 ## UR3 IMPORTANT!
 - SHARED FOLDER: /media/sf_robot-project/mqtt-ur3-bridge/src/urscript/auto-backup/mqtt-ur3-bridge
