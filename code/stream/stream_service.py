@@ -61,6 +61,16 @@ class Stream_Service:
         except Exception as e:
             print("An error occurred:", e)
             return None
+        
+    def apply_mask_to_image(self, image, mask_image_path='code/stream/assets/street-mask.png'):
+        try:
+            mask_image = Image.open(mask_image_path).convert("L")  # Convert to grayscale
+            return Image.composite(image, Image.new('RGB', image.size, 'white'), mask_image)
+        except Exception as e:
+            print("An error occurred while applying mask:", e)
+            return None
+
+
 
     def is_image_different(self, image, previous_image):
         """
