@@ -1,39 +1,49 @@
 from detection.detection_service import Detection_Service
+from detection.image_service import Image_Service
 from stream.stream_service import Stream_Service
 from interface.robot_service import Robot_Service
-from helpers import Helpers
+from logger import Logger
+from PIL import Image
 import time
 
 class Count_Cars():
-  
-  def __init__(self) -> None:
-    self.detection_service = Detection_Service()
-    self.stream_service = Stream_Service()
-    self.robot_service = Robot_Service()
-    self.helpers = Helpers()
-    self.previous_image = None
-    self.previous_result = None
+    """
+    A class for counting cars using opencv and machine learning.
+    """
 
-  def count(self):
-    try:
-      while True:
-        pil_image = self.stream_service.get_image_from_url()
-        if self.previous_image is not None:
-          if self.stream_service.is_image_different(pil_image, self.previous_image):
-            masked_pil_image = self.stream_service.apply_mask_to_image(pil_image)
-            result, analysed_image = self.detection_service.analyse_image(self.helpers.convert_pil_image_to_opencv_image(masked_pil_image))
-            print("[{}] RESULT: {}".format(time.strftime("%Y-%m-%d %H:%M:%S"), result))
-            self.helpers.draw_box_around_recognised_objects(analysed_image, result)
-        elif self.previous_image is None:
-          masked_pil_image = self.stream_service.apply_mask_to_image(pil_image)
-          result, analysed_image = self.detection_service.analyse_image(self.helpers.convert_pil_image_to_opencv_image(masked_pil_image))
-          print("[{}] RESULT: {}".format(time.strftime("%Y-%m-%d %H:%M:%S"), result))
-          self.helpers.draw_box_around_recognised_objects(analysed_image, result)
-        self.previous_image = pil_image
-        self.previous_result = result
-        time.sleep(5)
-    except KeyboardInterrupt:
-      print("Keyboard interrupt received. Exiting...")
+    def __init__(self) -> None:
+        """
+        Initializes the Count_Cars object.
+        """
+        self.image_service = Image_Service()
+        self.detection_service = Detection_Service(self.image_service)
+        self.stream_service = Stream_Service()
+        self.robot_service = Robot_Service()
+        self.logger = Logger()
+        self.image: Image.Image = None
+        self.previous_image: Image.Image = None
+        self.previous_result = None
+      
+    def count(self):
+        """
+        Check wether there is a change in the image retrieved, analyse the image
+        and log the result.
+        Terminate via ctrl + c.
+        """
+        try:
+            while(True):
+                self.image = self.stream_service.get_image_from_url()
+                if self.previous_image:
+                    if self.image_service.is_image_different(self.image, self.previous_image):
+                        result, analysed_image = self.detection_service.analyse_image(self.image)
+                        self.logger.log(result, analysed_image)
+                elif self.previous_image is None:
+                    result, analysed_image = self.detection_service.analyse_image(self.image)
+                    self.logger.log(result, analysed_image)
+                time.sleep(4)
+        except KeyboardInterrupt:
+            print("Keyboard interrupt received. Exiting...")
+
       
 count_Cars = Count_Cars()
 count_Cars.count()
