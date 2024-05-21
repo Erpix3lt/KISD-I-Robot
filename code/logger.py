@@ -19,6 +19,7 @@ class Logger():
         result: The result to be logged.
         image (Image.Image): The image associated with the result.
     """
-    print("[{}] RESULT: {}".format(time.strftime("%Y-%m-%d %H:%M:%S"), result))
+    #print("[{}] RESULT: {}".format(time.strftime("%Y-%m-%d %H:%M:%S"), result))
+    print("RESULT: ", result)
     cv2.imshow('IMAGE', np.array(image))
     cv2.waitKey(0)

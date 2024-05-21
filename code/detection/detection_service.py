@@ -92,3 +92,27 @@ class Detection_Service:
         """
         result = self.model(self.initialise_image(image, analyse_with_mask))
         return result, self.finalize_image(image, result)
+    
+    def get_car_count_from_result(self, result):
+        """
+        Counts the total number of cars found in the detection result.
+
+        Args:
+        - result: Detection result returned by the YOLOv5 model.
+
+        Returns:
+        Total number of cars found in the detection result.
+        """
+        # Initialize variable to store the count of cars detected
+        car_count = 0
+        
+        # Extract dataframe from result
+        data_frame = result.pandas().xyxy[0]
+        
+        # Iterate through each detected object
+        for index, row in data_frame.iterrows():
+            # Check if the label of the object is 'car'
+            if row['name'] == 'car':
+                car_count += 1
+        
+        return car_count

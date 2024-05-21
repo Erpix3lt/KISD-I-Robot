@@ -1,4 +1,5 @@
 from .mqtt_service import Mqtt_Service
+import time
 
 class Robot_Service(Mqtt_Service):
     """
@@ -28,7 +29,7 @@ class Robot_Service(Mqtt_Service):
             except Exception as e:
                 print("Error publishing MQTT message:", e)
                 
-    def get_val(self, timeout=5) -> str:
+    def get_val(self, timeout=8) -> str:
         """
         Retrieve a value from the robot via MQTT with a given timeout.
 
@@ -42,13 +43,20 @@ class Robot_Service(Mqtt_Service):
   
     def move_pos(self, pos:str):
         """
-        Move the robot to the specified position.
+        Set the robot to the specified position.
 
         Args:
             pos (str): Position identifier.
 
         """
         body = "movePos:" + pos
+        self.set_cmd(body)
+        
+    def move_j(self):
+        """
+        Move the robot.
+        """        
+        body = "movejPose"
         self.set_cmd(body)
         
     def get_pose(self) -> str:
@@ -138,4 +146,16 @@ class Robot_Service(Mqtt_Service):
         except Exception as e:
             print("Error asserting the current tcp values:", e)
             return False
+
+    ########################
+    # Abstract functions   #
+    ########################
+
+    def count(self, n: int, wait_in_seconds: float= 4):
+        for _ in range(n):
+            self.move_pos('1')
+            time.sleep(wait_in_seconds)
+            self.move_pos('2')
+            time.sleep(wait_in_seconds)
+            
 
