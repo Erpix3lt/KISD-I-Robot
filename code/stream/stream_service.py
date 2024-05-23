@@ -74,10 +74,3 @@ class Stream_Service:
             print("An error occurred:", e)
             return None
 
-# Example usage
-if __name__ == "__main__":
-    stream_service = Stream_Service()
-    image = stream_service.get_image_from_url()
-    if image:
-        image.show()  # Display the image
-        # image.save("fetched_image.jpg")  # Save the image if needed
