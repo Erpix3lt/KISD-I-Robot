@@ -16,7 +16,7 @@ class Count_Cars():
         Initializes the Count_Cars object.
         """
         self.mqtt = Robot_Service()
-        self.mqtt.move_pos('0')
+        self.mqtt.looking_idle(2)
         self.image_service = Image_Service()
         self.detection_service = Detection_Service(self.image_service)
         self.stream_service = Stream_Service()
@@ -39,13 +39,15 @@ class Count_Cars():
                         result, analysed_image = self.detection_service.analyse_image(self.image)
                         car_count = self.detection_service.get_car_count_from_result(result)
                         print("car count:", car_count)
+                        self.mqtt.move_towards_count()
                         self.mqtt.count(car_count)
                 elif self.previous_image is None:
                     result, analysed_image = self.detection_service.analyse_image(self.image)
                     car_count = self.detection_service.get_car_count_from_result(result)
                     print("car count:", car_count)
-                    self.mqtt.count(car_count)
-                time.sleep(4)
+                    self.mqtt.move_towards_count()
+                    self.mqtt.count(car_count)    
+                self.mqtt.looking_idle(4)
         except KeyboardInterrupt:
             print("Keyboard interrupt received. Exiting...")
 
