@@ -245,7 +245,7 @@ class Robot_Service(Mqtt_Service):
         self.move_to_tcp_pos(preclick.x, preclick.y, preclick.z, preclick.ax, preclick.ay, preclick.az, time=0.3)
         time.sleep(2)
 
-    def count(self, n: int, wait_in_seconds: float = .8, time_per_move = 0.2):
+    def count(self, n: int, wait_in_seconds: float = 2, time_per_move = 0.2):
         for _ in range(n):
             self.move_to_tcp_pos(click.x, click.y, click.z, click.ax, click.ay, click.az, time=time_per_move)
             self.move_to_tcp_pos(preclick.x, preclick.y, preclick.z, preclick.ax, preclick.ay, preclick.az, time=time_per_move)
