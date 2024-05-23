@@ -11,6 +11,7 @@ class Stream_Service:
 
     Attributes:
         default_url (str): The default URL used for fetching images.
+        crop_margin_top (int): The top margin to use when cropping images.
     """
 
     def __init__(self) -> None:
@@ -21,8 +22,8 @@ class Stream_Service:
         for fetching images.
         """
         load_dotenv()
-        self.crop_margin_top: int = int(os.getenv("IMAGE_CROP_MARGIN_TOP"))
-        self.default_url: str = os.getenv("DEFAULT_STREAM_URL")
+        self.crop_margin_top: int = int(os.getenv("IMAGE_CROP_MARGIN_TOP", 0))
+        self.default_url: str = os.getenv("DEFAULT_STREAM_URL", "http://192.168.0.52/")
 
     def get_image_from_url(self, url: Optional[str] = None, is_cropped: bool = True) -> Optional[Image.Image]:
         """
@@ -39,24 +40,44 @@ class Stream_Service:
         """
         if url is None:
             url = self.default_url
+
         try:
-            response = requests.get(url)
-
+            response = requests.get(url, stream=True)
             if response.status_code == 200:
-                image = Image.open(BytesIO(response.content))
-                if is_cropped:
-                    width, height = image.size
-                    left = 0
-                    top = self.crop_margin_top
-                    right = width
-                    bottom = height
+                byte_array = bytes()
 
-                    # Cropped image
-                    image = image.crop((left, top, right, bottom))
-                return image
+                for chunk in response.iter_content(chunk_size=1024):
+                    byte_array += chunk
+                    start = byte_array.find(b'\xff\xd8')
+                    end = byte_array.find(b'\xff\xd9')
+
+                    if start != -1 and end != -1:
+                        jpg = byte_array[start:end+2]
+                        byte_array = byte_array[end+2:]
+
+                        image = Image.open(BytesIO(jpg))
+                        if is_cropped:
+                            width, height = image.size
+                            left = 0
+                            top = self.crop_margin_top
+                            right = width
+                            bottom = height
+
+                            # Cropped image
+                            image = image.crop((left, top, right, bottom))
+                        return image
+
             else:
                 print("Failed to fetch image. Status code:", response.status_code)
                 return None
         except Exception as e:
             print("An error occurred:", e)
             return None
+
+# Example usage
+if __name__ == "__main__":
+    stream_service = Stream_Service()
+    image = stream_service.get_image_from_url()
+    if image:
+        image.show()  # Display the image
+        # image.save("fetched_image.jpg")  # Save the image if needed
