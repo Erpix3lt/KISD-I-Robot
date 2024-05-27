@@ -24,11 +24,20 @@ class TestRobotService(unittest.TestCase):
     def test_object_detection(self):   
         self.image = self.stream_service.get_image_from_url()
         result, analysed_image = self.detection_service.analyse_image(self.image)              
-        # Assert that result and image are not None
         self.assertIsNotNone(result)
         self.assertIsNotNone(analysed_image)
-        
         self.logger.log(result, analysed_image)
+        
+    def test_get_car_count_from_result(self):
+        self.image = self.stream_service.get_image_from_url()
+        result, analysed_image = self.detection_service.analyse_image(self.image) 
+        self.logger.log(result, analysed_image)    
+        ## DOUBLE THE ANALYSIS TO SIMULATE A PARKED, "STILL STANDING", CAR        
+        previous_result, previous_analysed_image = self.detection_service.analyse_image(self.image)  
+        self.logger.log(previous_result, previous_analysed_image)    
+        total_car_count = self.detection_service.get_car_count_from_result(result, previous_result)
+        print("TOTAL CAR COUNT: ",total_car_count)
+        self.assertEqual(total_car_count, 0)
     
 if __name__ == '__main__':
     unittest.main()
