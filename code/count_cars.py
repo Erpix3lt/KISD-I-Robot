@@ -41,9 +41,9 @@ class Count_Cars():
                     self.mqtt.move_towards_count()
                     self.mqtt.count(car_count)
                 self.mqtt.looking_idle(4)
-                
-                self.previous_image = self.image
-                self.previous_result = result
+                if result and self.image is not None:
+                    self.previous_image = self.image
+                    self.previous_result = result
         except KeyboardInterrupt:
             print("Keyboard interrupt received. Exiting...")
 
