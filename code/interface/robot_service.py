@@ -241,15 +241,19 @@ class Robot_Service(Mqtt_Service):
     # Abstract functions   #
     ########################
     
-    def move_towards_count(self):
-        self.move_to_tcp_pos(preclick.x, preclick.y, preclick.z, preclick.ax, preclick.ay, preclick.az, time=0.3)
-        time.sleep(2)
+    def move_towards_count(self, wait_in_seconds: float = 0.2, time_per_move = 0.3):
+        self.move_to_tcp_pos(preclick.x, preclick.y, preclick.z, preclick.ax, preclick.ay, preclick.az, time=time_per_move)
+        while not self.assert_has_reached_tcp_pos(preclick.x, preclick.y, preclick.z, preclick.ax, preclick.ay, preclick.az):
+            time.sleep(wait_in_seconds)
 
-    def count(self, n: int, wait_in_seconds: float = 2, time_per_move = 0.2):
+    def count(self, n: int, wait_in_seconds: float = 0.2, time_per_move = 0.2):
         for _ in range(n):
             self.move_to_tcp_pos(click.x, click.y, click.z, click.ax, click.ay, click.az, time=time_per_move)
+            while not self.assert_has_reached_tcp_pos(click.x, click.y, click.z, click.ax, click.ay, click.az):
+                time.sleep(wait_in_seconds)
             self.move_to_tcp_pos(preclick.x, preclick.y, preclick.z, preclick.ax, preclick.ay, preclick.az, time=time_per_move)
-            time.sleep(wait_in_seconds)
+            while not self.assert_has_reached_tcp_pos(preclick.x, preclick.y, preclick.z, preclick.ax, preclick.ay, preclick.az):
+                time.sleep(wait_in_seconds)
             print("CLICKING")
             
     def looking_idle(self, duration: int, wait_in_seconds: float = 0.8, time_per_move: float = 1.8):
