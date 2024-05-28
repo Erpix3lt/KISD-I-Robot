@@ -2,6 +2,7 @@ from .mqtt_service import Mqtt_Service
 import time
 import random
 import re
+from .socket_service import Socket_Service
 
 class TCPPosition:
     def __init__(self, x, y, z, ax, ay, az):
@@ -95,6 +96,8 @@ class Robot_Service(Mqtt_Service):
         """
         Initialize MQTT service for controlling the robot.
         """
+        self.socket_service = Socket_Service()
+        print("Init socket service")
         super().__init__()
 
     def set_cmd(self, body:str ):
@@ -243,32 +246,26 @@ class Robot_Service(Mqtt_Service):
         except Exception as e:
             print("Error asserting the current tcp values:", e)
             return False
+        
+    def interpret(self):
+        self.set_cmd("interpret")
 
     ########################
     # Abstract functions   #
     ########################
     
-    def move_towards_count(self, wait_in_seconds: float = 0.2, time_per_move = 0.3):
-        self.move_to_tcp_pos(preclick.x, preclick.y, preclick.z, preclick.ax, preclick.ay, preclick.az, time=time_per_move)
-        while not self.assert_has_reached_tcp_pos(preclick.x, preclick.y, preclick.z):
-            print("Has not reached pos MOVE_CLICK")
-            time.sleep(wait_in_seconds)
-        print("REACHED pos MOVE_CLICK")
-
-    def count(self, n: int, wait_in_seconds: float = 0.2, time_per_move = 0.2):
-        for _ in range(n):
-            self.move_to_tcp_pos(click.x, click.y, click.z, click.ax, click.ay, click.az, time=time_per_move)
-            while not self.assert_has_reached_tcp_pos(click.x, click.y, click.z):
-                print("Has not reached pos CLICK")
-                time.sleep(wait_in_seconds)
-            print("REACHED CLICK")
-            self.move_to_tcp_pos(preclick.x, preclick.y, preclick.z, preclick.ax, preclick.ay, preclick.az, time=time_per_move)
-            while not self.assert_has_reached_tcp_pos(preclick.x, preclick.y, preclick.z):
-                print("Has not reached pos PRE_CLICK")
-                time.sleep(wait_in_seconds)
-            print("REACHED PRE CLICK")
+    def move_towards_count(self):
+        self.socket_service.movejPose(preclick.x, preclick.y, preclick.z, preclick.ax, preclick.ay, preclick.az,)
+        #while not self.assert_has_reached_tcp_pos(preclick.x, preclick.y, preclick.z):
             
-    def looking_idle(self, duration: int, wait_in_seconds: float = 0.8, time_per_move: float = 1.8):
+
+    def count(self, n: int):
+        for _ in range(n):
+            self.socket_service.movejPose(click.x, click.y, click.z, click.ax, click.ay, click.az)
+            self.socket_service.movejPose(preclick.x, preclick.y, preclick.z, preclick.ax, preclick.ay, preclick.az)
+
+            
+    def looking_idle(self, duration: int):
         """
         Move to the looking_tiny_2 position with minimal randomness for the specified duration.
         
@@ -277,27 +274,44 @@ class Robot_Service(Mqtt_Service):
             wait_in_seconds (float): Wait time between moves.
             time_per_move (float): Time to reach each position.
         """
-        looking_tiny_2 = TCPPosition(
-            x=-0.200955, 
-            y=0.132689, 
-            z=0.430012, 
-            ax=-1.199808, 
-            ay=-1.26473, 
-            az=1.087221
+        idle_1 = TCPPosition(
+            x=-0.422448, 
+            y=-0.125552, 
+            z=0.413353, 
+            ax=-1.15982, 
+            ay=-1.402881, 
+            az=0.802694
         )
         
+        idle_2 = TCPPosition(
+            x=-0.42805,
+            y=-0.104786,
+            z=0.413398, 
+            ax=-1.189674, 
+            ay=-1.369338,
+            az=0.768508
+        )       
+        
+        idle_3 = TCPPosition(
+            x=-0.422779,
+            y=--0.099871,
+            z=0.468245, 
+            ax=-1.232925,
+            ay=-1.247152,
+            az=0.925764
+        ) 
         start_time = time.time()
         
         while (time.time() - start_time) < duration:
-            rand_x = looking_tiny_2.x + random.uniform(-0.01, 0.01)
-            rand_y = looking_tiny_2.y + random.uniform(-0.01, 0.01)
-            rand_z = looking_tiny_2.z + random.uniform(-0.01, 0.01)
-            
-            # Optional: Add randomness to rotations as well
-            rand_ax = looking_tiny_2.ax + random.uniform(-0.01, 0.01)
-            rand_ay = looking_tiny_2.ay + random.uniform(-0.01, 0.01)
-            rand_az = looking_tiny_2.az + random.uniform(-0.01, 0.01)
-            
-            self.move_to_tcp_pos(rand_x, rand_y, rand_z, rand_ax, rand_ay, rand_az, time=time_per_move)
-            time.sleep(wait_in_seconds)
+            self.socket_service.movejPose(idle_1.x, idle_1.y, idle_1.z, idle_1.ax, idle_1.ay, idle_1.az)
+            time.sleep(.8)
+
+            self.socket_service.movejPose(idle_2.x, idle_2.y, idle_2.z, idle_2.ax, idle_2.ay, idle_2.az)
+            time.sleep(.8)
+
+            self.socket_service.movejPose(idle_3.x, idle_3.y, idle_3.z, idle_3.ax, idle_3.ay, idle_3.az)
+            time.sleep(.8)
+
+            self.socket_service.movejPose(idle_2.x, idle_2.y, idle_2.z, idle_2.ax, idle_2.ay, idle_2.az)
+            time.sleep(.8)
             print("IDLING")

@@ -5,17 +5,17 @@ from threading import Thread
 import numpy as np
 
 
-class UR3Interpreter:
+class Socket_Service:
     def __init__(self):
         server_host = '10.3.3.14'
         server_port = 30020
         self.s = socket.socket()
         self.s.connect((server_host, server_port))
         self.position = None
-        self.time_for_each_movej = 0.0
+        self.time_for_each_movej = 0.8
+        print("initialised")
 
-    def movejPose(self, p, a=1.4, v=1.05, r=0.02):
-        x, y, z, ax, ay, az = p
+    def movejPose(self, x, y, z, ax, ay, az, a=1.4, v=1.05, r=0):
         self.send_cmd(f'movej(p[{x},{y},{z},{ax},{ay},{az}], a={a}, v={v}, t={self.time_for_each_movej}, r={r})')
 
     def movejJoints(self, j1, j2, j3, j4, j5, j6):

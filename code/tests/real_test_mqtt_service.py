@@ -55,10 +55,10 @@ click = TCPPosition(
     
 #     return x, y, z, ax, ay, az
 #mqtt.looking_idle(10)
-pose = mqtt.get_pose()
-
-print(pose)
-
+mqtt.count(1)
+# pose = mqtt.get_pose()
+# print(pose)
+#mqtt.looking_idle(10)
 # # mqtt.count(5)
 
 # mqtt.looking_idle(20)
