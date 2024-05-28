@@ -59,5 +59,5 @@ class Image_Service:
             return False
     else: 
         print("*WARN* Previous image was none.")
-        return False
+        return True
     

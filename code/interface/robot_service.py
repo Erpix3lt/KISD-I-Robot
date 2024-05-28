@@ -1,6 +1,7 @@
 from .mqtt_service import Mqtt_Service
 import time
 import random
+import re
 
 class TCPPosition:
     def __init__(self, x, y, z, ax, ay, az):
@@ -111,7 +112,7 @@ class Robot_Service(Mqtt_Service):
             except Exception as e:
                 print("Error publishing MQTT message:", e)
                 
-    def get_val(self, timeout=8) -> str:
+    def get_val(self, timeout=0.5) -> str:
         """
         Retrieve a value from the robot via MQTT with a given timeout.
 
@@ -206,32 +207,38 @@ class Robot_Service(Mqtt_Service):
         
         # Issue the move command
         self.set_cmd("movejPose")
-
         
-    def assert_has_reached_tcp_pos(self, x: float, y: float, z: float, ax: float = None, ay: float = None, az: float = None,):
+    def extract_pose_values(self, pose_string):
+        values = re.findall(r"[-+]?\d*\.\d+|\d+", pose_string)
+        values = [float(value) for value in values]
+        x, y, z, ax, ay, az = values[:6]
+        return x, y, z, ax, ay, az
+   
+    def assert_has_reached_tcp_pos(self, x: float, y: float, z: float, threshold: float = 0.02):
         """
-        Asserts the current tcp pos with a desired pos
+        Asserts the current tcp pos with a desired pos within a given threshold.
 
         Args:
-            Provide desired pos values
+            x (float): Desired x position.
+            y (float): Desired y position.
+            z (float): Desired z position.
+            threshold (float): Allowable threshold for position comparison.
 
         Returns:
-            True if the pos is equal to the desired pos. False if it is unequal or it failed.
+            bool: True if the pos is within the threshold of the desired pos. False otherwise.
         """
         try:
-            x_str = str(x)
-            y_str = str(y)
-            z_str = str(z)
-            ax_str = str(ax)
-            ay_str = str(ay)
-            az_str = str(az)
-            
-            pose_string = f"pose:p[{x_str}, {y_str}, {z_str}, {ax_str}, {ay_str}, {az_str}]"
             currentPosition = self.get_pose()
-
-            if currentPosition == pose_string:
-                return True
-            else:
+            if currentPosition is not None:
+                curr_x, curr_y, curr_z, curr_ax, curr_ay, curr_az = self.extract_pose_values(currentPosition)
+                print("Current Difference:", x - curr_x, y - curr_y, z - curr_z) 
+                # Compare each coordinate with the threshold
+                if abs(curr_x - x) <= threshold and abs(curr_y - y) <= threshold and abs(curr_z - z) <= threshold:
+                    return True
+                else:
+                    return False
+            else: 
+                print("CURRENT WAS NONE:")
                 return False
         except Exception as e:
             print("Error asserting the current tcp values:", e)
@@ -243,18 +250,23 @@ class Robot_Service(Mqtt_Service):
     
     def move_towards_count(self, wait_in_seconds: float = 0.2, time_per_move = 0.3):
         self.move_to_tcp_pos(preclick.x, preclick.y, preclick.z, preclick.ax, preclick.ay, preclick.az, time=time_per_move)
-        while not self.assert_has_reached_tcp_pos(preclick.x, preclick.y, preclick.z, preclick.ax, preclick.ay, preclick.az):
+        while not self.assert_has_reached_tcp_pos(preclick.x, preclick.y, preclick.z):
+            print("Has not reached pos MOVE_CLICK")
             time.sleep(wait_in_seconds)
+        print("REACHED pos MOVE_CLICK")
 
     def count(self, n: int, wait_in_seconds: float = 0.2, time_per_move = 0.2):
         for _ in range(n):
             self.move_to_tcp_pos(click.x, click.y, click.z, click.ax, click.ay, click.az, time=time_per_move)
-            while not self.assert_has_reached_tcp_pos(click.x, click.y, click.z, click.ax, click.ay, click.az):
+            while not self.assert_has_reached_tcp_pos(click.x, click.y, click.z):
+                print("Has not reached pos CLICK")
                 time.sleep(wait_in_seconds)
+            print("REACHED CLICK")
             self.move_to_tcp_pos(preclick.x, preclick.y, preclick.z, preclick.ax, preclick.ay, preclick.az, time=time_per_move)
-            while not self.assert_has_reached_tcp_pos(preclick.x, preclick.y, preclick.z, preclick.ax, preclick.ay, preclick.az):
+            while not self.assert_has_reached_tcp_pos(preclick.x, preclick.y, preclick.z):
+                print("Has not reached pos PRE_CLICK")
                 time.sleep(wait_in_seconds)
-            print("CLICKING")
+            print("REACHED PRE CLICK")
             
     def looking_idle(self, duration: int, wait_in_seconds: float = 0.8, time_per_move: float = 1.8):
         """
@@ -269,9 +281,9 @@ class Robot_Service(Mqtt_Service):
             x=-0.200955, 
             y=0.132689, 
             z=0.430012, 
-            ax=-2.16538, 
-            ay=-0.140816, 
-            az=2.110851
+            ax=-1.199808, 
+            ay=-1.26473, 
+            az=1.087221
         )
         
         start_time = time.time()

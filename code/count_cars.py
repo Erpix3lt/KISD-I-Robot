@@ -24,6 +24,7 @@ class Count_Cars():
         self.image: Image.Image = None
         self.previous_image: Image.Image = None
         self.previous_result = None
+        self.result = None
       
     def count(self):
         """
@@ -35,15 +36,17 @@ class Count_Cars():
             while(True):
                 self.image = self.stream_service.get_image_from_url()
                 if self.image_service.is_image_different(self.image, self.previous_image):
-                    result, analysed_image = self.detection_service.analyse_image(self.image)
-                    car_count = self.detection_service.get_car_count_from_result(result, self.previous_result)
+                    self.result, analysed_image = self.detection_service.analyse_image(self.image)
+                    car_count = self.detection_service.get_car_count_from_result(self.result, self.previous_result)
                     print("car count:", car_count)
-                    self.mqtt.move_towards_count()
-                    self.mqtt.count(car_count)
+                    if car_count > 0:
+                        self.mqtt.move_towards_count()
+                        self.mqtt.count(car_count)
                 self.mqtt.looking_idle(4)
-                if result and self.image is not None:
+                if self.result and self.image is not None:
+                    print("creating previous")
                     self.previous_image = self.image
-                    self.previous_result = result
+                    self.previous_result = self.result
         except KeyboardInterrupt:
             print("Keyboard interrupt received. Exiting...")
 
