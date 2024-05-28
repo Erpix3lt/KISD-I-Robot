@@ -93,26 +93,39 @@ class Detection_Service:
         result = self.model(self.initialise_image(image, analyse_with_mask))
         return result, self.finalize_image(image, result)
     
-    def get_car_count_from_result(self, result):
+    def get_car_count_from_result(self, result, previous_result, threshold=5):
         """
-        Counts the total number of cars found in the detection result.
+        Counts the total number of cars found in the detection result, excluding those
+        already detected in the previous result within a given threshold.
 
         Args:
         - result: Detection result returned by the YOLOv5 model.
+        - previous_result: Detection result from the previous frame.
+        - threshold: Pixel threshold to determine if a car has already been detected.
 
         Returns:
-        Total number of cars found in the detection result.
+        Total number of newly detected cars.
         """
-        # Initialize variable to store the count of cars detected
         car_count = 0
-        
-        # Extract dataframe from result
-        data_frame = result.pandas().xyxy[0]
-        
-        # Iterate through each detected object
-        for index, row in data_frame.iterrows():
-            # Check if the label of the object is 'car'
-            if row['name'] == 'car':
-                car_count += 1
+        current_cars = result.pandas().xyxy[0]
+        previous_cars = previous_result.pandas().xyxy[0] if previous_result is not None else None
+
+        def is_similar(car1, car2, threshold):
+            """Check if two cars are within a certain threshold of each other."""
+            return (abs(car1['xmin'] - car2['xmin']) < threshold and
+                    abs(car1['ymin'] - car2['ymin']) < threshold and
+                    abs(car1['xmax'] - car2['xmax']) < threshold and
+                    abs(car1['ymax'] - car2['ymax']) < threshold)
+
+        for _, current_car in current_cars.iterrows():
+            if current_car['name'] == 'car':
+                already_counted = False
+                if previous_cars is not None:
+                    for _, previous_car in previous_cars.iterrows():
+                        if previous_car['name'] == 'car' and is_similar(current_car, previous_car, threshold):
+                            already_counted = True
+                            break
+                if not already_counted:
+                    car_count += 1
         
         return car_count
