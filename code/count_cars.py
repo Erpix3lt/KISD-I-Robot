@@ -38,7 +38,7 @@ class Count_Cars():
                 self.image = self.stream_service.get_image_from_url()
                 
 
-                self.result, analysed_image = self.detection_service.analyse_image(self.image)
+                self.result, analysed_image = self.detection_service.analyse_image(self.image, analyse_with_mask=False)
                 car_count = self.detection_service.get_car_count_from_result(self.result, self.previous_result)
                 print("car count:", car_count)
                 if car_count > 0:
